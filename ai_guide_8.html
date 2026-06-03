@@ -1,0 +1,1946 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VADYA OFM — Легальность, риски, блокировки — честно</title>
+  
+  <!-- Google Fonts Import -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    /* ═══════════════════════════════════════
+       DESIGN SYSTEM & VARIABLES
+       ═══════════════════════════════════════ */
+    :root {
+      --bg:           #FAFAF6;  /* warm off-white, main background */
+      --surface:      #FFFFFF;  /* pure white, cards */
+      --surface2:     #F6F5F0;  /* light warm grey, secondary sections */
+      --border:       #E6E4DC;  /* soft warm beige borders */
+      --text:         #1A1A1A;  /* primary headlines */
+      --body:         #3C3C3C;  /* body text */
+      --muted:        #8A8A82;  /* captions, labels */
+      --dim:          #C0BEB5;  /* dividers, placeholders */
+      --highlight:    #F8F3E6;  /* warm cream — pull quotes, callouts */
+      --cta-bg:       #1A1A1A;  /* CTA button background */
+      --cta-text:     #FFFFFF;  /* CTA button text */
+      --tag-bg:       #1A1A1A;  /* category tag background */
+      --tag-text:     #FFFFFF;  /* category tag text */
+      --card-bad-bg:  #FDF4F4;  /* soft warm red tint */
+      --card-bad-br:  #EDD0D0;  /* soft warm red border */
+      --card-good-bg: #F4FAF5;  /* soft warm green tint */
+      --card-good-br: #C0DEC8;  /* soft warm green border */
+    }
+
+    /* ═══════════════════════════════════════
+       BASE RESET & LAYOUT
+       ═══════════════════════════════════════ */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      overflow-x: hidden;
+      background-color: var(--bg);
+      color: var(--body);
+      font-family: 'Inter', sans-serif;
+      position: relative;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    .section-spacing {
+      margin-top: 100px;
+      margin-bottom: 100px;
+    }
+
+    /* ═══════════════════════════════════════
+       TYPOGRAPHY
+       ═══════════════════════════════════════ */
+    h1, h2, h3, h4 {
+      font-family: 'Playfair Display', serif;
+      color: var(--text);
+      font-weight: 700;
+      line-height: 1.15;
+    }
+
+    p {
+      font-family: 'Inter', sans-serif;
+      font-size: 17px;
+      font-weight: 400;
+      line-height: 1.85;
+      color: var(--body);
+    }
+
+    .label-mono {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2.5px;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    .subhead-editorial {
+      font-family: 'Inter', sans-serif;
+      font-size: 20px;
+      font-weight: 300;
+      color: #555;
+      line-height: 1.6;
+    }
+
+    /* Pull Quote Style */
+    .pull-quote {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-style: italic;
+      color: #2A2A2A;
+      border-left: 3px solid var(--text);
+      padding: 24px 32px;
+      background-color: var(--highlight);
+      margin: 40px 0;
+    }
+
+    /* ═══════════════════════════════════════
+       ANIMATIONS & TRANSITIONS
+       ═══════════════════════════════════════ */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .stagger-load {
+      opacity: 0;
+      animation: fadeUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+    .delay-5 { animation-delay: 0.5s; }
+
+    .reveal-on-scroll {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), 
+                  transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal-on-scroll.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Component Hover Transitions */
+    .hover-card {
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                  box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .hover-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    }
+
+    /* ═══════════════════════════════════════
+       UI COMPONENTS
+       ═══════════════════════════════════════ */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--cta-bg);
+      color: var(--cta-text);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 12px 24px;
+      text-decoration: none;
+      border: none;
+      border-radius: 0;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.85;
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: transparent;
+      border: 1px solid var(--text);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 14px 28px;
+      text-decoration: none;
+      border-radius: 0;
+      cursor: pointer;
+      transition: background-color 0.2s ease, opacity 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--surface2);
+      opacity: 0.85;
+    }
+
+    .pill-tag {
+      display: inline-block;
+      background-color: var(--tag-bg);
+      color: var(--tag-text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      padding: 4px 12px;
+      border-radius: 2px;
+      text-transform: uppercase;
+    }
+
+    .divider {
+      height: 1px;
+      background-color: var(--border);
+      border: none;
+    }
+
+    .custom-badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 2px;
+      text-align: center;
+      width: fit-content;
+      margin-top: auto;
+    }
+
+    .badge-green {
+      border: 1px solid var(--card-good-br);
+      color: #1C7A3E;
+      background-color: var(--card-good-bg);
+    }
+
+    .badge-red {
+      border: 1px solid var(--card-bad-br);
+      color: #C44;
+      background-color: var(--card-bad-bg);
+    }
+
+    .badge-yellow {
+      border: 1px solid #E6D9BC;
+      color: #8A5C00;
+      background-color: var(--highlight);
+    }
+
+    .badge-grey {
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background-color: var(--surface2);
+    }
+
+    /* ═══════════════════════════════════════
+       STICKY NAVIGATION
+       ═══════════════════════════════════════ */
+    .sticky-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background-color: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .sticky-nav.scrolled {
+      box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-center {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+      padding: 0 16px;
+    }
+
+    /* ═══════════════════════════════════════
+       HERO / ARTICLE HEADER
+       ═══════════════════════════════════════ */
+    .hero-section {
+      padding-top: 60px;
+      padding-bottom: 40px;
+    }
+
+    .hero-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .hero-meta-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .hero-title {
+      font-size: 82px;
+      font-weight: 700;
+      line-height: 0.95;
+      color: var(--text);
+      margin-bottom: 32px;
+      max-width: 900px;
+    }
+
+    .hero-subhead {
+      max-width: 560px;
+      margin-bottom: 48px;
+    }
+
+    /* Author line container */
+    .author-line {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      gap: 20px;
+    }
+
+    .author-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* Fixed round avatar layout */
+    .author-avatar {
+      width: 40px;
+      height: 40px;
+      background-color: var(--text);
+      color: var(--surface);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .author-meta-text {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      column-gap: 8px;
+      row-gap: 2px;
+    }
+
+    .author-name {
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .author-role {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 13px;
+      color: #888;
+    }
+
+    .author-separator {
+      color: var(--border);
+      font-size: 14px;
+    }
+
+    .author-share {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* Premium Link Share Button & Tooltip */
+    .share-circle {
+      position: relative;
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      transition: background-color 0.2s, border-color 0.2s;
+    }
+
+    .share-circle:hover {
+      background-color: var(--surface2);
+      border-color: var(--dim);
+    }
+
+    .tooltip {
+      position: absolute;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%) translateY(4px);
+      background-color: var(--text);
+      color: var(--surface);
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: 2px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      z-index: 10;
+    }
+
+    .tooltip.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Stats Pills */
+    .stats-pills-row {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 32px;
+      border: 1px solid var(--border);
+      background-color: var(--surface);
+      padding: 16px 28px;
+      margin-bottom: 40px;
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .stat-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    .stat-val {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* ═══════════════════════════════════════
+       BLOCK 4: LEGALITY CARDS
+       ═══════════════════════════════════════ */
+    .legality-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      background-color: var(--border);
+      margin-top: 32px;
+    }
+
+    .legality-card {
+      background-color: var(--surface);
+      padding: 32px;
+      border-top: 2px solid var(--text);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .legality-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      margin-top: 8px;
+    }
+
+    .legality-status {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      margin-bottom: 12px;
+      border-radius: 0;
+      width: fit-content;
+    }
+
+    .legality-status.clean {
+      border: 1px solid var(--card-good-br);
+      color: #1C7A3E;
+      background-color: var(--card-good-bg);
+    }
+
+    .legality-status.grey {
+      border: 1px solid #E6D9BC;
+      color: #8A5C00;
+      background-color: var(--highlight);
+    }
+
+    .legality-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      color: var(--body);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .legality-advice {
+      background-color: var(--surface2);
+      border-left: 2px solid var(--dim);
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-top: auto;
+    }
+
+    /* ═══════════════════════════════════════
+       BLOCK 5: PLATFORMS TABLE
+       ═══════════════════════════════════════ */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      margin-top: 32px;
+      border: 1px solid var(--border);
+    }
+
+    .platforms-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 600px;
+    }
+
+    .platforms-table th {
+      background-color: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      text-align: left;
+      letter-spacing: 1px;
+    }
+
+    .platforms-table td {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: var(--body);
+      transition: background-color 0.2s ease;
+    }
+
+    .platforms-table tr:hover td {
+      background-color: var(--surface2);
+    }
+
+    .platforms-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .platform-pill {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 0;
+    }
+
+    .platform-pill.green {
+      border: 1px solid var(--card-good-br);
+      color: #1C7A3E;
+      background-color: var(--card-good-bg);
+    }
+
+    .platform-pill.yellow {
+      border: 1px solid #E6D9BC;
+      color: #8A5C00;
+      background-color: var(--highlight);
+    }
+
+    /* Red deep dive card */
+    .deep-dive-card {
+      background-color: var(--card-bad-bg);
+      border: 1px solid var(--card-bad-br);
+      padding: 32px;
+      margin-top: 32px;
+    }
+
+    .deep-dive-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    /* ═══════════════════════════════════════
+       BLOCK 6: BANS & MITIGATION
+       ═══════════════════════════════════════ */
+    .bans-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      background-color: var(--border);
+      margin-top: 32px;
+    }
+
+    .bans-side {
+      padding: 40px;
+    }
+
+    .bans-side.bad {
+      background-color: var(--card-bad-bg);
+    }
+
+    .bans-side.good {
+      background-color: var(--card-good-bg);
+    }
+
+    .bans-side-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .bans-side-label.bad { color: #C44; }
+    .bans-side-label.good { color: #1C7A3E; }
+
+    .bans-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .bans-list li {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--body);
+    }
+
+    .bans-list-title {
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .bans-list-title .cross {
+      color: #C44;
+    }
+
+    .bans-list-title .check {
+      color: #1C7A3E;
+    }
+
+    .bans-list-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+      display: block;
+    }
+
+    /* Giant 3-Days Callout Card */
+    .stats-box-callout {
+      background-color: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 32px;
+      margin-top: 32px;
+      display: flex;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .giant-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 72px;
+      font-weight: 700;
+      color: var(--dim);
+      line-height: 1;
+    }
+
+    /* ═══════════════════════════════════════
+       BLOCK 7: WHAT TO DO IF BLOCKED (PLAN B)
+       ═══════════════════════════════════════ */
+    .step-list {
+      margin-top: 40px;
+    }
+
+    .step-row {
+      border-bottom: 1px solid var(--border);
+      padding: 28px 0;
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 32px;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--border);
+      line-height: 1;
+      transition: color 0.3s ease;
+    }
+
+    .step-row:hover .step-num {
+      color: var(--text);
+    }
+
+    .step-content-inner {
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+
+    .step-content-inner.step-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .step-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .step-desc {
+      font-size: 15px;
+      color: var(--body);
+      line-height: 1.6;
+    }
+
+    /* ═══════════════════════════════════════
+       BLOCK 8: FINANCES & WITHDRAWAL
+       ═══════════════════════════════════════ */
+    .split-layout-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      margin-top: 32px;
+    }
+
+    .split-col-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+
+    .split-col-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .split-col-card {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+    }
+
+    .split-col-card:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .split-col-card-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .split-col-card-title {
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .split-col-card-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: var(--body);
+      line-height: 1.6;
+      margin-top: 4px;
+    }
+
+    .taxes-card-box {
+      background-color: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 24px;
+    }
+
+    .taxes-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .taxes-list li {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      color: var(--body);
+      line-height: 1.6;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .taxes-list .arrow-bullet {
+      color: var(--muted);
+      font-weight: bold;
+    }
+
+    /* ═══════════════════════════════════════
+       BLOCK 9: ANONYMITY ROW LIST
+       ═══════════════════════════════════════ */
+    .anonymity-row {
+      border-bottom: 1px solid var(--border);
+      padding: 24px 0;
+      display: grid;
+      grid-template-columns: 1fr 120px;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .anonymity-title {
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .anonymity-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: var(--body);
+      line-height: 1.6;
+    }
+
+    .anonymity-status-badge {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 14px;
+      text-align: center;
+      width: 100%;
+      border-radius: 0;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .anonymity-row:hover .anonymity-status-badge {
+      transform: scale(1.05);
+    }
+
+    .status-private {
+      border: 1px solid var(--card-good-br);
+      color: #1C7A3E;
+      background-color: var(--card-good-bg);
+    }
+
+    .status-public {
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background-color: var(--surface2);
+    }
+
+    .status-controllable {
+      border: 1px solid #E6D9BC;
+      color: #8A5C00;
+      background-color: var(--highlight);
+    }
+
+    /* ═══════════════════════════════════════
+       BLOCK 10: WHO SHOULD NOT ENTER
+       ═══════════════════════════════════════ */
+    .mismatch-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      background-color: var(--border);
+      margin-top: 32px;
+    }
+
+    .mismatch-card {
+      background-color: var(--card-bad-bg);
+      border: 1px solid var(--card-bad-br);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .mismatch-card:hover {
+      transform: translateY(-3px);
+      border-color: #C44;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    }
+
+    .mismatch-card.full-width {
+      grid-column: span 2;
+    }
+
+    .mismatch-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    .mismatch-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: var(--body);
+      line-height: 1.6;
+    }
+
+    /* ═══════════════════════════════════════
+       BLOCK 11: SINGLE CTA BLOCK
+       ═══════════════════════════════════════ */
+    .diagnostic-block {
+      max-width: 680px;
+      margin: 48px auto 0 auto;
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      padding: 48px;
+      position: relative;
+      text-align: left;
+    }
+
+    .free-badge {
+      position: absolute;
+      top: -12px;
+      right: 32px;
+      background-color: var(--text);
+      color: var(--surface);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      padding: 4px 16px;
+      letter-spacing: 1px;
+    }
+
+    .diagnostic-title {
+      font-size: 30px;
+      margin-bottom: 6px;
+    }
+
+    .diagnostic-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      color: #888;
+      margin-bottom: 32px;
+    }
+
+    .diagnostic-points {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .diag-point {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: var(--body);
+      line-height: 1.5;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .diag-point::before {
+      content: '→';
+      color: var(--muted);
+      font-weight: bold;
+    }
+
+    .for-whom-block {
+      background-color: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 20px 24px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: var(--body);
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    .for-whom-block strong {
+      color: var(--text);
+    }
+
+    .btn-cta-full {
+      width: 100%;
+      background-color: var(--cta-bg);
+      color: var(--cta-text);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      padding: 18px;
+      border: none;
+      border-radius: 0;
+      cursor: pointer;
+      text-align: center;
+      transition: opacity 0.2s ease;
+      display: block;
+      text-decoration: none;
+    }
+
+    .btn-cta-full:hover {
+      opacity: 0.85;
+    }
+
+    .cta-footnote {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 12px;
+    }
+
+    /* ═══════════════════════════════════════
+       BLOCK 12: NEXT GUIDE
+       ═══════════════════════════════════════ */
+    .next-guide-section {
+      border-top: 1px solid var(--border);
+      padding: 60px 0;
+      margin-top: 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 40px;
+    }
+
+    /* ═══════════════════════════════════════
+       BLOCK 13: FOOTER
+       ═══════════════════════════════════════ */
+    .main-footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      background-color: var(--bg);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .footer-links a {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s ease;
+      cursor: pointer;
+      position: relative;
+      z-index: 10;
+    }
+
+    .footer-links a:hover {
+      color: var(--text);
+    }
+
+    .footer-copy {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      color: #BBBBBB;
+    }
+
+    /* ═══════════════════════════════════════
+       RESPONSIVE DESIGN (768px BREAKPOINT)
+       ═══════════════════════════════════════ */
+    @media (max-width: 768px) {
+      .container {
+        padding: 0 20px;
+      }
+
+      .sticky-nav {
+        padding: 16px 20px;
+      }
+
+      .nav-center {
+        display: none;
+      }
+
+      .hero-title {
+        font-size: 44px;
+        line-height: 1.05;
+      }
+
+      .hero-subhead {
+        font-size: 18px;
+        margin-bottom: 32px;
+      }
+
+      .author-line {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 20px 0;
+      }
+
+      .author-meta-text {
+        flex-direction: column;
+        align-items: flex-start;
+        row-gap: 2px;
+      }
+
+      .author-separator {
+        display: none;
+      }
+
+      h2 {
+        font-size: 32px !important;
+      }
+
+      .section-spacing {
+        margin-top: 60px;
+        margin-bottom: 60px;
+      }
+
+      /* Stack columns strictly on mobile */
+      .legality-grid-3,
+      .bans-grid,
+      .step-row,
+      .split-layout-2,
+      .mismatch-grid,
+      .diagnostic-points,
+      .next-guide-section {
+        grid-template-columns: 1fr !important;
+        gap: 24px !important;
+      }
+
+      .next-guide-section {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 24px !important;
+      }
+
+      .next-guide-section .btn-secondary {
+        width: 100%;
+        text-align: center;
+      }
+
+      .step-row {
+        gap: 12px !important;
+        padding: 24px 0;
+      }
+
+      .step-num {
+        font-size: 32px;
+      }
+
+      .table-container {
+        width: 100%;
+        overflow-x: auto;
+        margin-top: 32px;
+        border: 1px solid var(--border);
+      }
+
+      .platforms-table {
+        min-width: 600px;
+      }
+
+      .anonymity-row {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+        padding: 20px 0;
+      }
+
+      .anonymity-status-badge {
+        width: 100% !important;
+        text-align: left;
+      }
+
+      .mismatch-card.full-width {
+        grid-column: span 1 !important;
+      }
+
+      .stats-box-callout {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 16px !important;
+      }
+
+      .diagnostic-block {
+        padding: 24px;
+      }
+
+      .free-badge {
+        right: 20px;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+
+      /* Convert stats row to column on mobile to prevent clipping */
+      .stats-pills-row {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 16px !important;
+        width: 100% !important;
+        padding: 16px !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ━━ БЛОК 1: НАВИГАЦИЯ (sticky) -->
+  <nav class="sticky-nav" id="main-nav">
+    <a href="#" class="nav-logo">VADYA OFM</a>
+    <div class="nav-center">Монетизация AI-моделей · Практика и система</div>
+    <a href="#cta-section" class="btn-primary">Записаться на разбор →</a>
+  </nav>
+
+  <main class="container">
+
+    <!-- ━━ БЛОК 2: ГЕРОЙ (article header) -->
+    <header class="hero-section section-spacing" id="hero-section">
+      <div class="hero-meta-row staggered-load">
+        <span class="pill-tag" style="border-radius: 0;">ГАЙД .08</span>
+        <span class="hero-meta-text">· &nbsp; Бесплатный гайд · 14 минут чтения · 2025</span>
+      </div>
+
+      <h1 class="hero-title staggered-load delay-1">
+        Легальность,<br>
+        риски, блокировки —<br>
+        честно
+      </h1>
+
+      <p class="subhead-editorial hero-subhead staggered-load delay-2">
+        Этот гайд не про то, чтобы напугать. И не про то, чтобы просто успокоить. Про то, как всё устроено на самом деле.
+      </p>
+
+      <div class="author-line staggered-load delay-3">
+        <div class="author-left">
+          <div class="author-avatar">V</div>
+          <div class="author-meta-text">
+            <span class="author-name">Автор: Вадя</span>
+            <span class="author-separator">·</span>
+            <span class="author-role">Эксперт по AI-моделям</span>
+          </div>
+        </div>
+        <div class="author-share">
+          <span>Поделиться гайдом:</span>
+          <button class="share-circle" id="share-link-btn" data-url="https://vadyaofm8.vercel.app" aria-label="Скопировать ссылку">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+            </svg>
+            <span class="tooltip" id="copy-tooltip">Ссылка скопирована</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="stats-pills-row staggered-load delay-4">
+        <div class="stat-item">
+          <span class="stat-label">ЮРИДИЧЕСКИЙ СТАТУС</span>
+          <span class="stat-val">Анализ регулирования</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">РЕАЛЬНЫЕ РИСКИ</span>
+          <span class="stat-val">Факты без прикрас</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">ПЛАН ПРИ БЛОКИРОВКЕ</span>
+          <span class="stat-val">Четкий алгоритм</span>
+        </div>
+      </div>
+
+      <hr class="divider">
+    </header>
+
+    <!-- ━━ БЛОК 3: ВСТУПЛЕНИЕ -->
+    <section class="reveal-on-scroll">
+      <div class="pull-quote">
+        "Люди, которые дошли до этого гайда — думающие. Они хотят понимать реальные риски до того, как войти в нишу. Это правильно. Вот полная картина без прикрас."
+      </div>
+
+      <p class="editorial-p">
+        Большинство гайдов в этой нише либо полностью игнорируют тему легальности, либо отделываются общими успокаивающими фразами. Мы сделаем иначе — разберём каждый аспект конкретно: что реально запрещено, что находится в серой зоне, а что абсолютно законно и безопасно.
+      </p>
+      <p class="editorial-p">
+        Важное предупреждение: этот материал не заменяет официальную юридическую консультацию. Это обобщение практического опыта людей, которые прямо сейчас успешно работают в этой нише. Для решения сложных юридических вопросов в твоей конкретной юрисдикции всегда требуется квалифицированный юрист.
+      </p>
+    </section>
+
+    <!-- ━━ БЛОК 4: ЛЕГАЛЬНОСТЬ -->
+    <section class="section-spacing reveal-on-scroll" id="legality-section">
+      <span class="label-mono">// ВОПРОС 01</span>
+      <h2>Легально ли это вообще?</h2>
+      <p style="max-width: 720px; margin-top: 12px; margin-bottom: 32px;">
+        Короткий ответ: да, в большинстве стран создание и монетизация полностью виртуального AI-контента законна. Но есть важные нюансы, которые необходимо понимать с самого начала.
+      </p>
+
+      <div class="legality-grid-3">
+        <!-- Card 1 -->
+        <div class="legality-card hover-card">
+          <span class="label-mono">АВТОРСКОЕ ПРАВО</span>
+          <h3 class="legality-title">AI-контент и право</h3>
+          <span class="legality-status clean">ЧИСТО</span>
+          <p class="legality-desc">
+            AI-сгенерированный контент не нарушает чужих авторских прав — при условии, что ты создаешь оригинального персонажа с нуля, а не копируешь лица реальных людей без их прямого согласия.
+          </p>
+          <div class="legality-advice">
+            Законы в сфере ИИ быстро развиваются. Следи за изменениями трактовок авторского права в твоей юрисдикции.
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="legality-card hover-card">
+          <span class="label-mono">МОНЕТИЗАЦИЯ</span>
+          <h3 class="legality-title">Контент для взрослых</h3>
+          <span class="legality-status grey">СЕРАЯ ЗОНА</span>
+          <p class="legality-desc">
+            Монетизация взрослого контента легальна во многих странах, но её регулирование очень сильно различается. Fanvue и аналоги работают строго в правовом поле при условии верификации создателя.
+          </p>
+          <div class="legality-advice">
+            Всегда уточняй правовой статус дистрибуции подобного контента в стране своего проживания.
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="legality-card hover-card">
+          <span class="label-mono">АНОНИМНОСТЬ</span>
+          <h3 class="legality-title">Личные данные</h3>
+          <span class="legality-status clean">ЗАКОННО</span>
+          <p class="legality-desc">
+            Работать под вымышленным псевдонимом и полностью скрывать свою реальную личность — абсолютно законная практика. Модель является вымышленным персонажем, а не твоим реальным лицом.
+          </p>
+          <div class="legality-advice">
+            Платформы потребуют верификацию по паспорту при выводе средств, но эта информация строго конфиденциальна.
+          </div>
+        </div>
+      </div>
+
+      <div class="pull-quote reveal-on-scroll">
+        "Резюме: создание и монетизация оригинального AI-персонажа легальна в большинстве стран. Главное — строго соблюдать внутренние правила платформ и базовые законы своей юрисдикции."
+      </div>
+    </section>
+
+    <!-- ━━ БЛОК 5: ПРАВИЛА ПЛАТФОРМ -->
+    <section class="section-spacing reveal-on-scroll" id="platforms-section">
+      <span class="label-mono">// ВОПРОС 02</span>
+      <h2>Что говорят платформы про AI-контент в 2025</h2>
+      <p style="max-width: 720px; margin-top: 12px; margin-bottom: 32px;">
+        Внутренние правила платформ — это не государственные законы, но их систематическое нарушение ведет к быстрой блокировке аккаунта. Вот актуальные требования ключевых площадок.
+      </p>
+
+      <!-- Table -->
+      <div class="table-container">
+        <table class="platforms-table">
+          <thead>
+            <tr>
+              <th>ПЛАТФОРМА</th>
+              <th>AI-КОНТЕНТ</th>
+              <th>СТАТУС</th>
+              <th>ГЛАВНОЕ ПРАВИЛО</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Fanvue</strong></td>
+              <td>Разрешён явно</td>
+              <td><span class="platform-pill green">ЗЕЛЁНЫЙ СВЕТ</span></td>
+              <td>Обязательное указание в настройках профиля, что контент создан с помощью ИИ.</td>
+            </tr>
+            <tr>
+              <td><strong>Telegram</strong></td>
+              <td>Не ограничен</td>
+              <td><span class="platform-pill green">ЗЕЛЁНЫЙ СВЕТ</span></td>
+              <td>Соблюдение общих правил пользования платформой (запрет на противоправный контент).</td>
+            </tr>
+            <tr>
+              <td><strong>Instagram</strong></td>
+              <td>Серая зона</td>
+              <td><span class="platform-pill yellow">ОСТОРОЖНО</span></td>
+              <td>Активная чистка подозрительных AI-профилей. Требуется аккуратный прогрев и обход фильтров.</td>
+            </tr>
+            <tr>
+              <td><strong>TikTok</strong></td>
+              <td>Серая зона</td>
+              <td><span class="platform-pill yellow">ОСТОРОЖНО</span></td>
+              <td>Требует обязательной маркировки видеороликов, созданных с использованием ИИ.</td>
+            </tr>
+            <tr>
+              <td><strong>Reddit</strong></td>
+              <td>Зависит от сабреддита</td>
+              <td><span class="platform-pill yellow">ОСТОРОЖНО</span></td>
+              <td>Каждое отдельное сообщество (сабреддит) устанавливает свои правила для AI-публикаций.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Instagram Deep Dive Card -->
+      <div class="deep-dive-card reveal-on-scroll">
+        <h3 class="deep-dive-title">Instagram 2025: что происходит</h3>
+        <p class="editorial-p" style="font-size: 15px; margin-bottom: 16px;">
+          Instagram ведет последовательную борьбу со спам-аккаунтами. Прямые ссылки на монетизационные платформы, использование популярных шаблонов link-агрегаторов и резкие всплески неестественной активности вызывают автоматическую блокировку.
+        </p>
+        <p class="editorial-p" style="font-size: 15px; margin-bottom: 16px;">
+          Именно поэтому использование личного сайта-прокладки в bio и естественное ведение профиля — это не просто рекомендация, а критический фактор выживания аккаунта. Мы детально разбирали эту связку в Гайде .03.
+        </p>
+        <p class="editorial-p" style="font-size: 13px; color: var(--muted); border-left: 2px solid var(--card-bad-br); padding-left: 12px;">
+          Помни: внешние соцсети (Instagram, TikTok) — это лишь каналы получения трафика, они могут блокироваться. Настоящая база и актив твоего бизнеса — это Telegram. Это гарантирует выживание твоей воронки при любых блокировках.
+        </p>
+      </div>
+    </section>
+
+    <!-- ━━ БЛОК 6: БЛОКИРОВКИ -->
+    <section class="section-spacing reveal-on-scroll" id="bans-section">
+      <span class="label-mono">// ВОПРОС 03</span>
+      <h2>Почему банят — и как снизить риск до минимума</h2>
+
+      <div class="pull-quote">
+        "Блокировка аккаунта — это не конец бизнеса. При правильно настроенной воронке бан одного источника трафика — это лишь временное неудобство на пару дней, а не потеря всего проекта."
+      </div>
+
+      <p style="max-width: 720px; margin-top: 12px; margin-bottom: 32px;">
+        Блокировки случаются в любой контент-индустрии. Наша задача — не искать мифический способ «100% защиты», а выстроить архитектуру бизнеса так, чтобы потеря одного аккаунта не останавливала общий поток прибыли.
+      </p>
+
+      <div class="bans-grid">
+        <!-- Left: Triggers -->
+        <div class="bans-side bad">
+          <span class="bans-side-label bad">ТРИГГЕРЫ БАНА</span>
+          <ul class="bans-list">
+            <li>
+              <span class="bans-list-title"><span class="cross">✗</span> Прямая ссылка на Fanvue в bio</span>
+              <span class="bans-list-sub">Алгоритмы социальных сетей мгновенно считывают внешние ссылки на подобные платформы.</span>
+            </li>
+            <li>
+              <span class="bans-list-title"><span class="cross">✗</span> Использование link-агрегаторов</span>
+              <span class="bans-list-sub">Сервисы вроде Beacons давно занесены в стоп-листы автоматических систем модерации.</span>
+            </li>
+            <li>
+              <span class="bans-list-title"><span class="cross">✗</span> Спам-паттерны в личных сообщениях</span>
+              <span class="bans-list-sub">Массовая рассылка однотипного текста новым пользователям — самый быстрый путь к бану.</span>
+            </li>
+            <li>
+              <span class="bans-list-title"><span class="cross">✗</span> Нарушение правил сообществ</span>
+              <span class="bans-list-sub">Публикация излишне откровенного контента в публичных соцсетях без цензуры.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Right: Mitigation -->
+        <div class="bans-side good">
+          <span class="bans-side-label good">КАК СНИЗИТЬ РИСК</span>
+          <ul class="bans-list">
+            <li>
+              <span class="bans-list-title"><span class="check">✓</span> Собственный сайт-прокладка</span>
+              <span class="bans-list-sub">Использование простого личного сайта в bio имитирует поведение реального блогера.</span>
+            </li>
+            <li>
+              <span class="bans-list-title"><span class="check">✓</span> Telegram как ядро базы</span>
+              <span class="bans-list-sub">Подписчики аккумулируются в Telegram-канале, откуда их невозможно заблокировать.</span>
+            </li>
+            <li>
+              <span class="bans-list-title"><span class="check">✓</span> Маркировка AI-контента</span>
+              <span class="bans-list-sub">Честное указание формата снижает процент жалоб со стороны бдительных пользователей.</span>
+            </li>
+            <li>
+              <span class="bans-list-title"><span class="check">✓</span> Органическое личное общение</span>
+              <span class="bans-list-sub">Отказ от ботов автопостинга в пользу реального ведения диалогов согревает базу.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Giant 3-Days Callout Card -->
+      <div class="stats-box-callout reveal-on-scroll">
+        <span class="giant-num">3</span>
+        <div>
+          <h4 style="font-family: 'Inter', sans-serif; font-weight: 700; font-size: 17px; color: var(--text); margin-bottom: 6px;">Дня — столько занимает восстановление при бане</h4>
+          <p style="font-size: 15px; color: var(--body); line-height: 1.6;">
+            При правильно выстроенной архитектуре потеря одного аккаунта в соцсети требует не более 2–3 дней на создание нового. Твоя основная теплая аудитория уже находится в безопасности внутри Telegram, а монетизация на Fanvue продолжает стабильно работать.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ━━ БЛОК 7: ЕСЛИ ЗАБЛОКИРОВАЛИ (PLAN B) -->
+    <section class="section-spacing reveal-on-scroll" id="plan-b-section">
+      <span class="label-mono">// ПЛАН Б</span>
+      <h2>Заблокировали. Что делать — пошагово</h2>
+      <p style="max-width: 720px; margin-top: 12px; margin-bottom: 16px;">
+        Если блокировка всё же произошла — не паникуй. Действуй строго по проверенному регламенту.
+      </p>
+
+      <div class="step-list">
+        
+        <!-- Step 1 -->
+        <div class="step-row">
+          <span class="step-num">01</span>
+          <div class="step-content-inner">
+            <h3 class="step-title">Не делай резких поспешных движений</h3>
+            <p class="step-desc">
+              В первые часы просто зафиксируй ситуацию. Не пытайся мгновенно регистрировать новый аккаунт с того же устройства и IP-адреса — это приведет к моментальной повторной блокировке по цепочке. Иногда временные баны автоматически спадают в течение 24–48 часов.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-row">
+          <span class="step-num">02</span>
+          <div class="step-content-inner">
+            <h3 class="step-title">Проанализируй характер блокировки</h3>
+            <p class="step-desc">
+              Определи, что именно заблокировано: конкретный пост, временное ограничение на действия (shadowban) или полная вечная блокировка аккаунта. От этого зависят твои дальнейшие действия.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-row">
+          <span class="step-num">03</span>
+          <div class="step-content-inner">
+            <h3 class="step-title">Направь фокус на Telegram</h3>
+            <p class="step-desc">
+              Поскольку твоя основная теплая база подписчиков уже находится в Telegram, твои текущие продажи не останавливаются. Опубликуй пост для аудитории, объяснив ситуацию с техническими неполадками — это повысит доверие.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="step-row">
+          <span class="step-num">04</span>
+          <div class="step-content-inner">
+            <h3 class="step-title">Подай структурированную апелляцию</h3>
+            <p class="step-desc">
+              Используй официальные каналы поддержки платформы. Пиши сдержанно, вежливо, ссылаясь на возможное недоразумение со стороны алгоритмов. В ряде случаев блокировки успешно снимаются ручной модерацией.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="step-row">
+          <span class="step-num">05</span>
+          <div class="step-content-inner">
+            <h3 class="step-title">Запусти резервный аккаунт по правилам</h3>
+            <p class="step-desc">
+              Если апелляция отклонена — подготовь новое чистое устройство (или используй антидетект-браузер с качественными прокси), зарегистрируй новый почтовый ящик и начни ведение заново. Твоя готовая база в Telegram поможет быстро вернуть стартовые охваты.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="pull-quote reveal-on-scroll">
+        "Главное правило: никогда не строй весь свой бизнес на одной сторонней платформе. Telegram — это твой личный актив. Монетизационный сервис — это лишь инструмент приема платежей. Разделяй эти понятия."
+      </div>
+    </section>
+
+    <!-- ━━ БЛОК 8: ФИНАНСЫ & WITHDRAWAL -->
+    <section class="section-spacing reveal-on-scroll" id="finances-section">
+      <span class="label-mono">// ВОПРОС 04</span>
+      <h2>Деньги: вывод, налоги, что нужно знать</h2>
+      <p style="max-width: 720px; margin-top: 12px; margin-bottom: 32px;">
+        Практические аспекты работы с финансами в нише. Помни, что для построения точной схемы уплаты налогов в твоей стране необходима консультация профильного бухгалтера.
+      </p>
+
+      <div class="split-layout-2">
+        <!-- Left: Withdrawal -->
+        <div>
+          <h3 class="split-col-title">Как устроен вывод средств</h3>
+          <div class="split-col-list">
+            
+            <div class="split-col-card">
+              <span class="split-col-card-label">МЕТОД 01</span>
+              <h4 class="split-col-card-title">Прямой банковский перевод</h4>
+              <p class="split-col-card-text">Платформы вроде Fanvue поддерживают стандартный международный вывод средств (например, Paxum или прямой перевод на карту). Работает в большинстве стран.</p>
+            </div>
+
+            <div class="split-col-card">
+              <span class="split-col-card-label">МЕТОД 02</span>
+              <h4 class="split-col-card-title">Wise и аналоги</h4>
+              <p class="split-col-card-text">Использование мультивалютных электронных кошельков и платежных систем для приема долларов и последующей конвертации в локальную валюту. Самый популярный выбор.</p>
+            </div>
+
+            <div class="split-col-card">
+              <span class="split-col-card-label">МЕТОД 03</span>
+              <h4 class="split-col-card-title">Криптовалюта</h4>
+              <p class="split-col-card-text">Некоторые платформы поддерживают вывод напрямую в стейблкоинах (USDT). Обеспечивает максимальную скорость и конфиденциальность, но требует базового понимания криптокошельков.</p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Right: Taxes -->
+        <div>
+          <h3 class="split-col-title">Налоги и легализация доходов</h3>
+          <div class="taxes-card-box">
+            <ul class="taxes-list">
+              <li>
+                <span class="arrow-bullet">→</span>
+                <span>Доходы, полученные от зарубежных платформ, подлежат стандартному декларированию в стране твоего налогового резидентства.</span>
+              </li>
+              <li>
+                <span class="arrow-bullet">→</span>
+                <span>Оформление статуса самозанятого или индивидуального предпринимателя (ИП) существенно упрощает учет и минимизирует налоговые ставки во многих юрисдикциях.</span>
+              </li>
+              <li>
+                <span class="arrow-bullet">→</span>
+                <span>Веди детальный финансовый учет доходов с самого первого дня работы — это избавит от сложностей с отчетностью в будущем.</span>
+              </li>
+            </ul>
+
+            <div class="course-callout-card" style="margin-top: 24px; background-color: var(--card-bad-bg); border-color: var(--card-bad-br);">
+              <span class="course-callout-label" style="color: #A44;">ВАЖНО</span>
+              <p class="course-callout-text">
+                Мы настоятельно рекомендуем потратить один час на консультацию с местным налоговым специалистом. Это самое простое и дешевое решение для долгосрочной безопасной работы.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ━━ БЛОК 9: АНОНИМНОСТЬ И ЛИЧНЫЕ ДАННЫЕ -->
+    <section class="section-spacing reveal-on-scroll" id="anonymity-section">
+      <span class="label-mono">// ВОПРОС 05</span>
+      <h2>Анонимность: что реально видит платформа, а что скрыто</h2>
+
+      <div class="pull-quote">
+        "Сохранять полную анонимность в сети — это абсолютно нормально и законно. Главное — выстроить техническую гигиену работы с самого первого дня."
+      </div>
+
+      <!-- Rows -->
+      <div style="margin-top: 32px;">
+        
+        <!-- Row 1 -->
+        <div class="anonymity-row">
+          <div>
+            <h3 class="anonymity-title">Документы владельца аккаунта</h3>
+            <p class="anonymity-desc">Платформы монетизации требуют верификацию по паспорту (KYC) для борьбы с мошенничеством. Эти данные защищены и никогда не публикуются в открытом доступе.</p>
+          </div>
+          <div>
+            <span class="anonymity-status-badge status-private">ПРИВАТНО</span>
+          </div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="anonymity-row">
+          <div>
+            <h3 class="anonymity-title">Имя модели и её образ</h3>
+            <p class="anonymity-desc">Полностью вымышленный персонаж. Никакие элементы контента, псевдонимы или контактные адреса не связаны с твоей реальной личностью.</p>
+          </div>
+          <div>
+            <span class="anonymity-status-badge status-public">ПУБЛИЧНО</span>
+          </div>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="anonymity-row">
+          <div>
+            <h3 class="anonymity-title">Финансовые реквизиты</h3>
+            <p class="anonymity-desc">Твои реквизиты для вывода средств видит только платежный процессор платформы. Подписчики никогда не смогут узнать данные твоей карты или счета.</p>
+          </div>
+          <div>
+            <span class="anonymity-status-badge status-private">ПРИВАТНО</span>
+          </div>
+        </div>
+
+        <!-- Row 4 -->
+        <div class="anonymity-row">
+          <div>
+            <h3 class="anonymity-title">IP-адрес и цифровой след</h3>
+            <p class="anonymity-desc">Фиксируются системами безопасности платформ для защиты от взломов. Использование качественных VPN и прокси-серверов полностью скрывает твою реальную локацию.</p>
+          </div>
+          <div>
+            <span class="anonymity-status-badge status-controllable">УПРАВЛЯЕМО</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Practical steps box -->
+      <div class="practical-steps-box site-steps-container reveal-on-scroll">
+        <h3 style="font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: var(--text);">
+          Пять базовых правил цифровой гигиены
+        </h3>
+        <ul class="taxes-list" style="margin-top: 20px;">
+          <li><span class="arrow-bullet">✓</span> Зарегистрируй отдельный рабочий почтовый ящик исключительно под этот проект.</li>
+          <li><span class="arrow-bullet">✓</span> Используй отдельный виртуальный номер телефона для прохождения всех верификаций.</li>
+          <li><span class="arrow-bullet">✓</span> Псевдоним и история персонажа не должны иметь никаких пересечений с твоей реальной жизнью.</li>
+          <li><span class="arrow-bullet">✓</span> Не используй личные фотографии, фоны или уникальные узнаваемые предметы интерьера в генерациях.</li>
+          <li><span class="arrow-bullet">✓</span> Привлекай ассистентов только по регламентированным скриптам без предоставления мастер-доступов.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ━━ БЛОК 10: КОМУ ЭТО НЕ ПОДОЙДЁТ -->
+    <section class="section-spacing reveal-on-scroll" id="mismatch-section">
+      <span class="label-mono">// ЧЕСТНЫЙ РАЗГОВОР</span>
+      <h2>Кому лучше не входить в эту нишу</h2>
+
+      <div class="pull-quote">
+        "Лучше честно понять ограничения на берегу, чем потратить ресурсы и разочароваться. Мы ценим твоё время."
+      </div>
+
+      <p style="max-width: 720px; margin-top: 12px; margin-bottom: 32px;">
+        Эта бизнес-модель высокоэффективна, но она подходит не всем. Существуют определенные стартовые условия, при которых риски могут перевешивать потенциальные доходы.
+      </p>
+
+      <div class="mismatch-grid">
+        <!-- Item 1 -->
+        <div class="mismatch-card">
+          <h3 class="mismatch-title">Высокая публичность в реальной жизни</h3>
+          <p class="mismatch-desc">Если ты являешься известной медийной персоной, ведешь активную госслужбу или работаешь в крайне консервативной корпоративной среде — риск даже случайной деанонимизации может обойтись слишком дорого.</p>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="mismatch-card">
+          <h3 class="mismatch-title">Страны с жесткими ограничениями</h3>
+          <p class="mismatch-desc">В некоторых юрисдикциях дистрибуция и монетизация любого контента категории 18+ жестко преследуется по закону. Обязательно изучи локальное законодательство страны проживания до начала действий.</p>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="mismatch-card">
+          <h3 class="mismatch-title">Ожидание мгновенной кнопки «бабло»</h3>
+          <p class="mismatch-desc">Первые 1–2 месяца требуют системного вовлечения, генерации, настройки воронки и анализа показателей. Это реальный бизнес, а не легкая схема пассивного заработка в один клик.</p>
+        </div>
+
+        <!-- Item 4 -->
+        <div class="mismatch-card">
+          <h3 class="mismatch-title">Внутренний моральный дискомфорт</h3>
+          <p class="mismatch-desc">Если специфика ниши (включая работу в сегменте для взрослых) вызывает у тебя сильное личное неприятие — не стоит начинать. Долгосрочно и успешно работать в психологически некомфортной среде невозможно.</p>
+        </div>
+
+        <!-- Item 5 (Full width) -->
+        <div class="mismatch-card full-width">
+          <h3 class="mismatch-title">Отсутствие готовности работать по системе</h3>
+          <p class="mismatch-desc">Хаотичные бессистемные публикации и запуск рекламы на пустые профили принесут только слив бюджета. Эта ниша любит последовательность. Если ты не готов следовать четкой инструкции хотя бы первые 30 дней — результата не будет.</p>
+        </div>
+      </div>
+
+      <!-- Takeaway callout card -->
+      <div class="course-callout-card" style="margin-top: 32px; background-color: var(--surface2); border-color: var(--border);">
+        <span class="label-mono" style="margin-bottom: 4px;">ЕСЛИ ЭТИ ПУНКТЫ НЕ ПРО ТЕБЯ</span>
+        <p class="course-callout-text" style="color: var(--body);">
+          Значит, все основные риски полностью управляемы, а ниша абсолютно доступна для работы. Единственный оставшийся вопрос — это построение работающей системы. Именно с этого практического шага начинается наша совместная работа на диагностической сессии.
+        </p>
+      </div>
+    </section>
+
+    <!-- ━━ БЛОК 11: CTA — ЕДИНСТВЕННЫЙ (МЯГКИЙ) -->
+    <section class="section-spacing cta-container reveal-on-scroll" id="cta-section">
+      <h2>Готов разобраться в своей ситуации?</h2>
+      <p style="max-width: 580px; margin: 12px auto 0 auto; color: var(--body);">
+        На бесплатной сессии мы разберем твои стартовые условия, оценим риски в твоей юрисдикции и составим оптимальный пошаговый план запуска. Честно и без давления.
+      </p>
+
+      <div class="diagnostic-block reveal-on-scroll">
+        <div class="free-badge">БЕСПЛАТНО</div>
+        <h3 class="diagnostic-title">Диагностическая сессия</h3>
+        <p class="diagnostic-sub">45 минут. Понятный индивидуальный план запуска под твою ситуацию.</p>
+
+        <div class="diagnostic-points">
+          <div class="diag-point">Оценка юридических рисков в твоей стране</div>
+          <div class="diag-point">Анализ твоей ниши на безопасность и доходность</div>
+          <div class="diag-point">Персональный алгоритм действий на первые 30 дней</div>
+          <div class="diag-point">Прямые ответы на вопросы по легальности и выводу средств</div>
+        </div>
+
+        <div class="for-whom-block">
+          <strong>Кому подходит:</strong> ты внимательно изучил все риски, осознаешь потенциал ниши и хочешь запустить проект правильно с самого начала.<br>
+          <strong>Не подходит:</strong> если ты еще не ознакомился с Гайдами .01–.03 (сначала изучи их, там заложена база).
+        </div>
+
+        <!-- CTA Link -->
+        <a href="https://vadyaofm8.vercel.app" target="_blank" class="btn-cta-full">Записаться на бесплатный разбор →</a>
+        <div class="cta-footnote">Количество мест ограничено. Идет запись на следующую неделю.</div>
+      </div>
+    </section>
+
+    <!-- ━━ БЛОК 12: СЛЕДУЮЩИЙ ГАЙД -->
+    <section class="next-guide-section reveal-on-scroll" id="next-guide-section">
+      <div>
+        <span class="label-mono">СЛЕДУЮЩИЙ ГАЙД</span>
+        <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: var(--text); margin-bottom: 8px;">
+          Гайд .09 — Сколько вложить<br>на старте и когда окупится
+        </h3>
+        <p style="font-size: 15px; color: var(--muted);">
+          Все риски разобраны. Перейдем к самому главному вопросу: детальный финансовый расчет стартового бюджета и сроки выхода на окупаемость.
+        </p>
+      </div>
+      <div>
+        <!-- Link to Guide 09 -->
+        <a href="https://vadyaofm9.vercel.app" target="_blank" class="btn-secondary">Читать гайд .09 →</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ━━ БЛОК 13: FOOTER (UPDATED INTERNAL NAVIGATION) -->
+  <footer class="main-footer">
+    <div class="container footer-inner">
+      <a href="#" class="nav-logo">VADYA OFM</a>
+      <div class="footer-links">
+        <a href="#legality-section">Легальность</a>
+        <a href="#platforms-section">Правила</a>
+        <a href="#bans-section">Риски</a>
+        <a href="#cta-section">Разбор</a>
+      </div>
+      <div class="footer-copy">
+        © 2025 Vadya OFM · Все права защищены
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════════════
+       JAVASCRIPT
+       ═══════════════════════════════════════ -->
+  <script>
+    // 1. SCROLL REVEAL ANIMATIONS (Intersection Observer)
+    const revealElements = document.querySelectorAll('.reveal-on-scroll');
+    
+    const observerOptions = {
+      root: null,
+      threshold: 0.08,
+      rootMargin: '0px 0px -40px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target); // Trigger only once
+        }
+      });
+    }, observerOptions);
+
+    revealElements.forEach(el => {
+      observer.observe(el);
+    });
+
+    // 2. STICKY NAV SHADOW ON SCROLL
+    const nav = document.getElementById('main-nav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 20) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+    });
+
+    // 3. PREMIUM CLIPBOARD COPY INTERACTION
+    const shareBtn = document.getElementById('share-link-btn');
+    const tooltip = document.getElementById('copy-tooltip');
+
+    if (shareBtn && tooltip) {
+      shareBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const copyUrl = shareBtn.getAttribute('data-url');
+        
+        navigator.clipboard.writeText(copyUrl).then(() => {
+          tooltip.classList.add('show');
+          setTimeout(() => {
+            tooltip.classList.remove('show');
+          }, 2000);
+        }).catch(err => {
+          console.warn('Автокопирование не поддерживается браузером. Адрес: ', copyUrl);
+        });
+      });
+    }
+
+    // 4. PLAN B STEPS SEQUENCE TRIGGER (Fade in sequence inside mistakes rows)
+    const stepRows = document.querySelectorAll('.step-row');
+    const stepObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const content = entry.target.querySelector('.step-content-inner');
+          if (content) {
+            content.classList.add('step-visible');
+          }
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { root: null, threshold: 0.1 });
+
+    stepRows.forEach(row => {
+      stepObserver.observe(row);
+    });
+  </script>
+</body>
+</html>
